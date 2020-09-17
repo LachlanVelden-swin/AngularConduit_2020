@@ -1,9 +1,12 @@
 <h1>{{title}}</h1>
 
-<button (click)="login()" >Login</button>
+<button (click)="articlesService.get()" >Get</button>
+<br />
+<button (click)="create()">Create</button>
 
-<ul>
-    <li *ngFor="let acrt of art">
+<div *ngIf="articlesService.loading">Loading....</div>
+<ul *ngIf="articlesService.loaded">
+    <li *ngFor="let acrt of articlesService.articles">
         <small>{{acrt.articleId}}</small>{{acrt.title}}
     </li>  
 </ul>

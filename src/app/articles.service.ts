@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Article, ArticlesEnvelope } from './article';
+import { Article, ArticlesEnvelope, ArticleEnvelope, CreateAnonymousCommand } from './article';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 export class ArticlesService {
 
   articles: Article[] = [];
-  loading: boolean = false; 
+  loading: boolean = false;
   loaded: boolean = false;
 
   private httpClient: HttpClient;
@@ -24,10 +24,21 @@ export class ArticlesService {
     this.loading = true;
     this.loaded = false;
     request.subscribe((response) => {
-      
+
       this.articles = response.articles;
       this.loading = false;
       this.loaded = true;
+    });
+  }
+
+  createAnonymous(username: string, article: Article) {
+    let request = this.httpClient.post<ArticleEnvelope>("https://swindev.me/articles/anonymous", {
+      username: username,
+      article: article
+    } as CreateAnonymousCommand);
+    request.subscribe((response) => {
+      this.articles = [...this.articles, response.article]; // is a new array, with new value added
+      this.get();
     });
   }
 

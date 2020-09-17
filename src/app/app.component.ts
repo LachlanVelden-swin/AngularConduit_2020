@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ArticlesEnvelope, Article } from "./article";
+import { ArticlesService } from "./articles.service";
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,18 +10,17 @@ import { ArticlesEnvelope, Article } from "./article";
 export class AppComponent {
   title = 'angularconduit2020';
 
-  public art: Article[];
-  private httpClient: HttpClient;
-  constructor(httpClient: HttpClient) {
-    this.httpClient = httpClient;
+  public articlesService: ArticlesService;
+  constructor(articlesService: ArticlesService) {
+    this.articlesService = articlesService;
   }
 
 
-  login() {
-    let request = this.httpClient.get<ArticlesEnvelope>("https://swindev.me/articles");
-    request.subscribe((response) => {
-      console.log(response);
-      this.art = response.articles;
+  create() {
+    this.articlesService.createAnonymous("lachlan", {
+      title: "Lachlan teaches HTTP POST",
+      description: "BLAH BLAH BLAH",
+      body: "Do this and that and bamn",
     });
   }
 
